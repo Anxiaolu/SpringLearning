@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc   http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd ">
+    
+    <description>Spring mvc</description>
+    <!--开启@Request,@Autowired等注解配置-->
+    <context:annotation-config/>
+    <!--DispatcherServlet上下文,只搜索@Controller标注的类 不搜索其他的类-->
+    <context:component-scan base-package="cn.edu.sdut.sfotlab" use-default-filters="false">
+        <!--扫描规则-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller">
+    </context:component-scan>
+    <!--让DispatcherServlet启用基于annotation的handler mapping-->
+    <mvc:annotation-driven/>
+    
+    <!--定义视图解析器,用来映射路径和实际页面的位置,是Spring MVC的渲染的核心机制.-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--拼接前缀-->
+        <property name="prefix" value="/"></property>
+        <!--拼接后缀-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+</beans>
+
