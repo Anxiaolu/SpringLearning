@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author huanlu
  */
 @Controller
-@RequestMapping("/test")
 public class HelloController {
     
-    @RequestMapping("/mvc")
+    @RequestMapping("/test")
     public String test(){
         System.out.println("Spring test!");
         return "home";
