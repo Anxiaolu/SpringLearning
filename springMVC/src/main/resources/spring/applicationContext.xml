@@ -1,139 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" 
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd
-    http://www.springframework.org/schema/mvc 
-    http://www.springframework.org/schema/mvc/spring-mvc.xsd
-    http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop.xsd"
-    http://www.springframework.org/schema/data/jpa 
-    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"  
-    default-lazy-init="true">
-    
-     <description>SpringJpa配置</description>  
-        <!-- 启动spring的注解功能 -->  
-    <context:component-scan base-package="com"><!-- base-package 如果多个，用“,”分隔 -->  
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  
-    </context:component-scan>  
-    <!-- 加载数据库连接配置文件 -->  
-    <bean id="propertyPlaceholderConfigurer"  
-        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
-        <property name="locations">  
-            <list>  
-                <value>classpath:db.properties</value>  
-            </list>  
-        </property>  
-    </bean>     
-      
-    <!-- Hibernate对Jpa的实现 即配置JPA的厂商类-->  
-    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
-        <property name="generateDdl" value="${jpa.generateDdl}"/>  
-        <property name="database" value="${jpa.database}"/>  
-        <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect"/>  
-        <property name="showSql" value="${jpa.showSql}"/>  
-    </bean>  
-      
-    <!-- 配置  Jpa 事务管理器 -->  
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
-        <property name="entityManagerFactory" ref="entityManagerFactory" />  
-    </bean>  
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
-        <tx:attributes>  
-            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="save*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="insert*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="add*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="list*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="update*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="delete*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="remove*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="*" propagation="REQUIRED"/>  
-        </tx:attributes>  
-    </tx:advice>  
-      
-    <!-- 配置entityManagerFactory -->  
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
-        <!-- 指定数据源 -->  
-        <property name="jdbc/labDS" ref="dataSource" />  
-        <!-- 指定Jpa持久化实现厂商类,这里以Hibernate为例 -->  
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />  
-        <!-- 指定Entity实体类包路径 -->  
-        <property name="packagesToScan" value="cn.edu.sdut.softlab.entity"/>  
-        <!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->  
-         <property name="jpaDialect">  
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>  
-        </property>  
-        <property name="jpaProperties">  
-            <props>  
-                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>  
-                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>  
-                <prop key="net.sf.ehcache.configurationResourceName">${hibernate.ehcache.configFile}</prop>  
-                <prop key="hibernate.cache.use_second_level_cache">true</prop>  
-                <prop key="hibernate.cache.use_query_cache">true</prop>  
-                <prop key="hibernate.search.default.directory_provider">filesystem</prop>  
-                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>  
-                <prop key="hibernate.hbm2ddl.auto">update</prop>  
-            </props>  
-        </property>  
-    </bean>  
-      
-    <!-- 数据源配置,使用应用内的druid数据库连接池 -->  
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">   
-            <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->  
-            <property name="driverClassName" value="${jdbc.driver}" />  
-              
-            <!-- 基本属性 url、user、password -->  
-            <property name="url" value="${jdbc.url}" />  
-            <property name="username" value="${jdbc.user}" />  
-            <property name="password" value="${jdbc.password}" />  
-              
-            <!-- 配置初始化大小、最小、最大 -->  
-            <property name="initialSize" value="${jdbc.pool.minIdle}" />  
-            <property name="minIdle" value="${jdbc.pool.minIdle}" />  
-            <property name="maxActive" value="${jdbc.pool.maxActive}" />  
-              
-            <!-- 配置获取连接等待超时的时间 -->  
-            <property name="maxWait" value="${jdbc.pool.maxActive}" />  
-              
-            <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->  
-            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}" />  
-              
-            <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->  
-            <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}" />  
-              
-            <property name="validationQuery" value="SELECT 'x'" />  
-            <property name="testWhileIdle" value="${jdbc.pool.testWhileIdle}" />  
-            <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}" />  
-            <property name="testOnReturn" value="${jdbc.pool.testOnReturn}" />  
-              
-            <!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用）  
-            <property name="poolPreparedStatements" value="true" />  
-            <property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->  
-              
-            <!-- 配置监控统计拦截的filters -->  
-            <property name="filters" value="${jdbc.pool.filters}" />   
-        </bean>  
-      
-      
-    <!-- 开启扫描 -->  
-    <!-- 如果spring用了jpa，并且类型为LocalContainerEntityManagerFactoryBean，则组件注册在此配置文件出现即可，其余配置文件可忽略   
-        使用component来替代annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入\   
-    <context:component-scan base-package="com.spring.jpa" />-->  
-        <!-- 重要配置：启用扫描并自动创建代理的功能 -->  
-    <jpa:repositories base-package="com.spring.jpa"  
-        transaction-manager-ref="transactionManager"  
-        entity-manager-factory-ref="entityManagerFactory" />  
-          
-    <!-- 开启注解事务 -->  
-    <tx:annotation-driven transaction-manager="transactionManager"  
-        proxy-target-class="true" />  
-    <aop:aspectj-autoproxy />  
-    
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 加载src/main/resources下的属性文件 -->
+	<context:property-placeholder location="classpath*:database.properties" />
+
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven />
+
+	<!-- 扫描的包路径 去掉mvc的注解 -->
+	<context:component-scan base-package="org.zhaoqian">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<import resource="datasource.xml" />
+	<import resource="spring-jpa.xml" />
 </beans>
