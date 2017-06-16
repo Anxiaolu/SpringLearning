@@ -7,13 +7,6 @@
     
     <display-name>springMVC</display-name>
     
-    <resource-ref>
-        <description>postgreSQL Datasource example</description>
-        <res-ref-name>jdbc/labDS</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>
-
     <!-- 同时加载多个spring配置文件可用 -->  
     <context-param>  
         <param-name>contextConfigLocation</param-name>  
@@ -41,15 +34,39 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     
+    <!-- 字符集 过滤器 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!--为了使用SpringMVC架构实现REST-->
+    <filter>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <!-- 阿里巴巴Druid数据源设置 -->
-    <servlet>
+<!--    <servlet>
         <servlet-name>DruidStatView</servlet-name>
         <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DruidStatView</servlet-name>
         <url-pattern>/druid/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
    
     <error-page>
         <error-code>404</error-code>

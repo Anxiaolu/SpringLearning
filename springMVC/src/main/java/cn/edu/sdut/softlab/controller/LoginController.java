@@ -15,33 +15,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
  * @author huanlu
  */
 @Controller
+@RequestMapping(value = "/login")
 public class LoginController {
     private Logger logger;
     
     @Autowired
     StuffService stuffService;
     
-    @RequestMapping(value = "usr_log",method = RequestMethod.POST)
-    public String login(Model model){
-        List<Stuff> stuffs = stuffService.findAll(Stuff.class);
-        model.addAttribute("sutffs", stuffs);
-        model.addAttribute("stuff", new Stuff());
-        for(Stuff s:stuffs){
-            
+    @RequestMapping(value = "/dologin",method = RequestMethod.POST)
+    public String login(String username,String password){
+        Stuff stuff = stuffService.findByUsernameAndPassword(username, password);
+        Stuff stuff2 = stuffService.findByName(username);
+        if (stuff != null) {
+            return "redirect:home";
         }
-        return "home";
-    }
-    
-    @RequestMapping(value = "login",method = RequestMethod.POST)
-    public String userLog(@ModelAttribute Stuff stuff,Model model){
-        
-        return "";
+        if (stuff2 == null) {
+            return "redirect:index";
+        }
+        return "redirect:index";
     }
     
     @ModelAttribute
@@ -49,5 +47,18 @@ public class LoginController {
     public String isLogIn(Model model){
         
         return "";
+    }
+    
+    @RequestMapping(value = "/getstuffs")
+    @ResponseBody
+    public List<Stuff> getAllStuffs(){
+        List<Stuff> stuffs = stuffService.findAll(Stuff.class);
+        return stuffs;
+    }
+    
+    @RequestMapping(value = "/deletstuff")
+    public void delectStuff(Stuff stuff)
+    {
+        stuffService.remove(stuff);
     }
 }

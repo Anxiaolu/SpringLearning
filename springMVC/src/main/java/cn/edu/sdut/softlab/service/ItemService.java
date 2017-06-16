@@ -25,10 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service
 @Stateless
+@Repository
 public class ItemService extends AbstractFacade<Item> {
 
     public ItemService() {

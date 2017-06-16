@@ -14,22 +14,22 @@
         <title>314 Labmanagement</title>
     </head>
     <body>
-        <form:form commandName="Stuff" action="usr_log" method="post">
+        <form action="/login/dologin" method="post">
             <fieldset>
                 <h3>Log In</h3>
                 <p>
                     <label for="username">UserName:</label>
-                    <form:input id="username" path="username"/>
+                    <input type="text" id="username" name="username"/>
                 </p>
                 <p>
                     <label for="password">Password:</label>
-                    <form:input id="password" path="password"/>
+                    <input type="password" id="password" name="password"/>
                 </p>
                 <p id="buttons">
                     <input id="reset" type="reset" tabindex="4">
                     <input id="submit" type="submit" tabindex="5" value="Log In">
                 </p>
             </fieldset>
-        </form:form>
+        </form>
     </body>
 </html>

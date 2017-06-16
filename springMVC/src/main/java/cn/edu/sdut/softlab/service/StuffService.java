@@ -27,10 +27,12 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Named;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service
 @Stateless
+@Repository
 @Named("stuff")
 public class StuffService extends AbstractFacade<Stuff> {
 
@@ -45,11 +47,18 @@ public class StuffService extends AbstractFacade<Stuff> {
     return findSingleByNamedQuery("Stuff.findByUsernameAndPassword", parameters, Stuff.class).get();
   }
   
+  public Stuff findById(Integer id) {
+    Map<String,Object> parameters = new HashMap<>(0);
+    parameters.put("id", id);
+    return findSingleByNamedQuery("Stuff.findByUserId", parameters, Stuff.class).get();
+  }
+  
    public Stuff findByName(String username) {
     Map<String,Object> parameters = new HashMap<>(0);
     parameters.put("username", username);
     return findSingleByNamedQuery("Stuff.findByUsername", parameters, Stuff.class).get();
   } 
+   
    public List<String> findAllStuffName(){
        List<String> allstuffnameList = new ArrayList<>();
        List<Stuff> allstuffList = findAll(Stuff.class);

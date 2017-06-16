@@ -25,10 +25,12 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Named;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service
 @Stateless
+@Repository
 @Named("category")
 public class CategoryService extends AbstractFacade<Category> {
 
