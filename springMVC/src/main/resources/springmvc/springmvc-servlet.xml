@@ -15,25 +15,25 @@
     >
     
     <!--根目录跳转到index页面-->
-    <!--<mvc:view-controller path="/" view-name="redirect:index" />-->
+    <mvc:view-controller path="/" view-name="redirect:index" />
 
     <context:component-scan base-package="cn.edu.sdut.softlab">
         <context:include-filter type="annotation" 
-            expression="org.springframework.stereotype.Controller">
+            expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation" 
-            expression="org.springframework.web.bind.annotation.ControllerAdvice">
+            expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
     
-    <mvc:resources mapping="/sources/bootstrap/css/**" location="/sources/bootsrap/css"/>
+<!--    <mvc:resources mapping="/sources/bootstrap/css/**" location="/sources/bootsrap/css"/>
     <mvc:resources mapping="/sources/bootstrap/js/**" location="/sources/bootstrap/js"/>
     <mvc:resources mapping="/sources/css/**" location="/sources/css"/>
-    <mvc:resources mapping="/*.html" location="/"/>
-    <!--    <mvc:default-servlet-handler />-->
+    <mvc:resources mapping="/*.html" location="/"/>-->
+    <mvc:default-servlet-handler />
 	
     <!--默认解析器JSP+JSTL-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> 
-        <property name="prefix" value="/jsp/"></property>
+        <property name="prefix" value="/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
     

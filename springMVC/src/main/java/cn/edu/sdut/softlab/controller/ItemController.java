@@ -30,9 +30,10 @@ public class ItemController {
     
     private Logger logger;
     
+    
     private UserTransaction utx;
     
-    Dateformatter dateformatter;
+    private Dateformatter dateformatter;
     
     @Autowired
     ItemService itemService;

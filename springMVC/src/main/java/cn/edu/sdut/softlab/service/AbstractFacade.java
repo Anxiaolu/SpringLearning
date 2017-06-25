@@ -18,6 +18,7 @@
 
 package cn.edu.sdut.softlab.service;
 
+import cn.edu.sdut.softlab.jpa.EMFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,13 +26,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +40,10 @@ import org.springframework.stereotype.Service;
 @Repository
 public abstract class AbstractFacade<T> {
 
-  @Inject
-  EntityManager em;
-  
-  @Inject
-  Logger log;
+  @Autowired
+  EntityManager em = new EMFactory().CreateEntityManager();
+          
+  private Logger log;
 
   private final Class<T> entityClass;
 

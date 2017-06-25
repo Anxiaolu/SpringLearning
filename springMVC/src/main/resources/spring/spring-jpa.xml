@@ -18,61 +18,13 @@
     </bean>
 
     <!-- Hibernate对Jpa的实现 即配置JPA的厂商类-->  
-    <bean id="hibernateJpaVendorAdapter"  
-        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" /> -->  
-            <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
+    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
         <property name="generateDdl" value="${jpa.generateDdl}"/>  
         <property name="database" value="${jpa.database}"/>  
-        <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>  
+        <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect"/>  
         <property name="showSql" value="${jpa.showSql}"/>  
     </bean> 
 
-    <!-- 适用于所有环境的FactoryBean，能全面控制EntityManagerFactory配置,如指定Spring定义的DataSource等等. -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
-        <property name="entityManagerFactory" ref="entityManagerFactory" />  
-    </bean>  
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
-        <tx:attributes>  
-            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="save*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="insert*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="add*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="list*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="update*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="delete*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="remove*" propagation="REQUIRED" read-only="true"/>  
-            <tx:method name="*" propagation="REQUIRED"/>  
-        </tx:attributes>  
-    </tx:advice>
-
-    <!-- 配置entityManagerFactory -->  
-    <bean id="entityManagerFactory"  
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
-        <!-- 指定数据源 -->  
-        <property name="dataSource" ref="dataSource" />  
-        <!-- 指定Jpa持久化实现厂商类,这里以Hibernate为例 -->  
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />  
-        <!-- 指定Entity实体类包路径 -->  
-        <property name="packagesToScan" value="com.entity"/>  
-        <!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->  
-         <property name="jpaDialect">  
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>  
-        </property>  
-        <property name="jpaProperties">  
-            <props>  
-                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>  
-                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>  
-                <prop key="net.sf.ehcache.configurationResourceName">${hibernate.ehcache.configFile}</prop>  
-                <prop key="hibernate.cache.use_second_level_cache">true</prop>  
-                <prop key="hibernate.cache.use_query_cache">true</prop>  
-                <prop key="hibernate.search.default.directory_provider">filesystem</prop>  
-                <prop key="hibernate.show_sql">true</prop>  
-                <prop key="hibernate.hbm2ddl.auto">update</prop>  
-            </props>  
-        </property>  
-    </bean> 
-    
     <!-- 数据源配置,使用应用内的druid数据库连接池 -->  
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">   
             <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->  
@@ -101,10 +53,57 @@
             <property name="testWhileIdle" value="${jdbc.pool.testWhileIdle}" />  
             <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}" />  
             <property name="testOnReturn" value="${jdbc.pool.testOnReturn}" />  
-              
+            
             <!-- 配置监控统计拦截的filters -->  
             <property name="filters" value="${jdbc.pool.filters}" />   
     </bean>
+    
+    <!-- 配置entityManagerFactory -->  
+    <bean id="entityManagerFactory"  
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">  
+        <!-- 指定数据源 -->  
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceProvider" value="org.hibernate.ejb.HibernatePersistence"/> 
+        <!-- 指定Jpa持久化实现厂商类,这里以Hibernate为例 -->  
+        <property name="jpaVendorAdapter" value="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />  
+        <!-- 指定Entity实体类包路径 -->  
+        <property name="packagesToScan" value="cn.edu.sdut.softlab.entity"/>  
+        <!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->  
+        <property name="jpaDialect">  
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>  
+        </property>  
+        <property name="jpaProperties">  
+            <props>  
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>  
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>  
+                <prop key="net.sf.ehcache.configurationResourceName">${hibernate.ehcache.configFile}</prop>  
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>  
+                <prop key="hibernate.cache.use_query_cache">true</prop>  
+                <prop key="hibernate.search.default.directory_provider">filesystem</prop>  
+                <prop key="hibernate.show_sql">true</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>  
+            </props>  
+        </property>  
+    </bean> 
+    
+    <!-- 适用于所有环境的FactoryBean，能全面控制EntityManagerFactory配置,如指定Spring定义的DataSource等等. -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">  
+        <property name="entityManagerFactory" ref="entityManagerFactory" />  
+    </bean>  
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="save*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="insert*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="add*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="list*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="update*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="delete*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="remove*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="*" propagation="REQUIRED"/>  
+        </tx:attributes>  
+    </tx:advice>
     
     <!-- 如果spring用了jpa，并且类型为LocalContainerEntityManagerFactoryBean，则组件注册在此配置文件出现即可，其余配置文件可忽略   
         使用component来替代annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入-->

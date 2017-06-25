@@ -20,7 +20,6 @@ package cn.edu.sdut.softlab.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import javax.faces.bean.ManagedBean;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +43,6 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Su Baochen
  */
-@ManagedBean(name = "Item")
 @Entity
 @Table(name = "item")
 @XmlRootElement
