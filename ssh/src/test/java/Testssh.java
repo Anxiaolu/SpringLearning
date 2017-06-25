@@ -5,8 +5,8 @@
  */
 
 
+import cn.edu.sdut.softlab.entity.Category;
 import java.sql.SQLException;
-import javax.sql.DataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -29,6 +29,13 @@ public class Testssh {
         System.out.println(sessionFactory);
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
+        
+        Category category = new Category("qwe");
+            
+        session.save(category);
+        tx.commit();
+        session.close();
+        
     }
     
 }
