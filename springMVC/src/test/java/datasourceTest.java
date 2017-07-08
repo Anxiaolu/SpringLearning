@@ -18,15 +18,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author huanlu
  */
-public class datasourceTest {
-    
-    private ApplicationContext ctx = null;
-    
-    @Test
-    public void test(){
-        ctx = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
-        EntityManagerFactory emf = ctx.getBean(EntityManagerFactory.class);
-        System.out.println(emf);
-    }
-    
-}
+//public class datasourceTest {
+//    
+//    private ApplicationContext ctx = null;
+//    
+//    @Test
+//    public void test(){
+//        ctx = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
+//        EntityManagerFactory emf = ctx.getBean(EntityManagerFactory.class);
+//        System.out.println(emf);
+//    }
+//    
+//}

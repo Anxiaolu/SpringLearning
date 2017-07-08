@@ -6,7 +6,7 @@
 package cn.edu.sdut.softlab.controller;
 
 import cn.edu.sdut.softlab.entity.Stuff;
-import cn.edu.sdut.softlab.service.StuffService;
+import cn.edu.sdut.softlab.repository.StuffRepository;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,12 +23,12 @@ public class StuffController {
     private Logger logger;
     
     @Autowired
-    StuffService stuffService;
+    StuffRepository stuffService;
     
    @RequestMapping(value = "/stuff_add",method = RequestMethod.POST)
-   public String stuffAdd(@ModelAttribute Stuff stuff){
-       stuffService.create(stuff);
-       return "index";
+   public String stuffAdd(@ModelAttribute("user") Stuff stuff){
+       stuffService.saveAndFlush(stuff);
+       return "redirect:/stuffs";
    }
    
 }

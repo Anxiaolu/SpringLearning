@@ -25,6 +25,7 @@
         <druid.version>1.0.26</druid.version>
         <spring.version>4.3.6.RELEASE</spring.version>
         <commons-dbcp2.version>2.1</commons-dbcp2.version>
+        <spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
     </properties>
 
     <dependencies>
@@ -137,7 +138,11 @@
         </dependency>  
         
         <!--log4j-->
-     
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>

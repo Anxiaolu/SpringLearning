@@ -6,59 +6,45 @@
 package cn.edu.sdut.softlab.controller;
 
 import cn.edu.sdut.softlab.entity.Stuff;
-import cn.edu.sdut.softlab.service.StuffService;
-import java.util.List;
-import java.util.logging.Logger;
+import cn.edu.sdut.softlab.repository.StuffRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
  * @author huanlu
  */
 @Controller
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/")
 public class LoginController {
-    private Logger logger;
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
     
     @Autowired
-    StuffService stuffService;
+    StuffRepository stuffService;
     
-    @RequestMapping(value = "/dologin",method = RequestMethod.POST)
-    public String login(String username,String password){
-        Stuff stuff = stuffService.findByUsernameAndPassword(username, password);
-        Stuff stuff2 = stuffService.findByName(username);
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public String login(@RequestParam("username")String username,
+                        @RequestParam("password")String password,
+                        Model model){
+        logger.info("登录名:"+username+"密码为:"+password);
+        Stuff stuff = stuffService.findByNameAndPassword(username, password);
         if (stuff != null) {
             return "redirect:home";
-        }
-        if (stuff2 == null) {
-            return "redirect:index";
         }
         return "redirect:index";
     }
     
     @ModelAttribute
-    @RequestMapping(value = "/is_login")
+    @RequestMapping(value = "/islogin")
     public String isLogIn(Model model){
-        
         return "";
     }
     
-    @RequestMapping(value = "/getstuffs")
-    @ResponseBody
-    public List<Stuff> getAllStuffs(){
-        List<Stuff> stuffs = stuffService.findAll(Stuff.class);
-        return stuffs;
-    }
-    
-    @RequestMapping(value = "/deletstuff")
-    public void delectStuff(Stuff stuff)
-    {
-        stuffService.remove(stuff);
-    }
 }
