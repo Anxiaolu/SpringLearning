@@ -10,7 +10,7 @@
     <!-- 同时加载多个spring配置文件可用 -->  
     <context-param>  
         <param-name>contextConfigLocation</param-name>  
-        <param-value>classpath:/spring/applicationContext.xml</param-value>  
+        <param-value>classpath:/spring/spring-context.xml</param-value>  
     </context-param>
     
     <context-param>
@@ -28,7 +28,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:/spring/spring-*.xml</param-value>
+            <param-value>classpath:/spring/spring-web.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -36,6 +36,12 @@
         <servlet-name>springservlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    
+    <!-- 设定刷新日志配置文件的时间间隔，这里设置为10s -->
+    <context-param>
+        <param-name>log4jRefreshInterval</param-name>
+        <param-value>10000</param-value>
+    </context-param>
     
     <!-- 字符集 过滤器 -->
     <filter>
@@ -60,7 +66,7 @@
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
     
-     <!-- 配置静态资源不经过spring mvc -->
+<!--      配置静态资源不经过spring mvc 
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.css</url-pattern>
@@ -148,7 +154,7 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.eot</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
     
     <!-- 配置session超时时间，单位分钟 -->
     <session-config>

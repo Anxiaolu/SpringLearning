@@ -34,26 +34,22 @@
     </bean>
     
     <!-- Spring MVC JSON配置 -->
-<!--    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
             <list>
-                <bean id="fastJsonHttpMessageConverter" class="light.mvc.utils.FastJsonHttpMessageConverter">
+                <bean id="fastJsonHttpMessageConverter" class="cn.edu.sdut.softlab.util.FastJsonHttpMessageConverter">
                     <property name="supportedMediaTypes">
                         <list>
-                            <value>text/html;charset=UTF-8</value> 避免IE出现下载JSON文件的情况 
+                            <value>text/html;charset=UTF-8</value> 
+<!--                            避免IE出现下载JSON文件的情况 -->
                         </list>
                     </property>
                 </bean>
             </list>
         </property>
-    </bean>-->
-    
-    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
+    </bean>
     
     <!--导入mongodb的配置文件-->
     <import resource="spring-mongo.xml"/>
-        
-    <mvc:annotation-driven/>
         
 </beans>
