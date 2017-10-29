@@ -29,22 +29,21 @@ public class UserController {
     
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String login(){
-        User user = new User();
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("user", user);
         return "login";
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login")
     @SuppressWarnings("unchecked")
     public ModelAndView login(@RequestParam("loginname") String loginname,
             @RequestParam("password") String password,
             HttpSession session,
             ModelAndView mv) {
+        System.out.println("loginname:" + loginname);
         Map map = new HashMap();
         map.put("loginname", loginname);
         map.put("password", password);
         User user = userService.login(map);
+        System.out.print(user.toString());
         if (user != null) {
             session.setAttribute("loginuser", user);
             mv.setViewName("redirect:/show");

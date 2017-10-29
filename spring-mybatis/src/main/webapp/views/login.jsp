@@ -12,7 +12,7 @@
         <title>Login</title>
     </head>
     <body>
-        <form:form modelAttribute="User" action="{basePath}/login" commandName="User" method="post">
+        <form:form modelAttribute="User" action="/login" commandName="User" method="post">
             <input type="text" path="loginname" id="loginname"/>
             <input type="text" path="password" id="password"/>
             <input type="submit" id="submit"/>
